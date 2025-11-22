@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fitness Trainer - Complete Professional Edition</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Styles -->
+    <style>
+        /* === COPY AND PASTE ALL CSS FROM BELOW === */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --card-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            --card-shadow-hover: 0 15px 40px rgba(0,0,0,0.15);
+            --border-radius: 20px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            animation: slideDown 0.5s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        /* Main Content Grid */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+
+        /* Card Components */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            animation: fadeIn 0.6s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .card h2 {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1em;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.8);
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Button Styles */
+        button {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Workout Display */
+        .workout-display {
+            background: rgba(248, 249, 250, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            min-height: 200px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .exercise-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #667eea;
+            animation: slideIn 0.4s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .exercise-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .exercise-name {
+            font-weight: 700;
+            color: #333;
+            font-size: 1.15em;
+            margin-bottom: 8px;
+        }
+
+        .exercise-details {
+            color: #666;
+            margin: 8px 0;
+            font-size: 0.95em;
+        }
+
+        .exercise-meta {
+            display: flex;
+            gap: 10px;
+            margin: 8px 0;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .difficulty-badge.beginner {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .difficulty-badge.intermediate {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .difficulty-badge.advanced {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .muscle-groups {
+            font-size: 0.8em;
+            color: #666;
+            background: #f5f5f5;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+
+        .form-tip {
+            background: linear-gradient(135deg, #e8f4f8 0%, #d1ecf1 100%);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #0277bd;
+            border-left: 3px solid #0277bd;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+            margin: 25px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            background: var(--success-gradient);
+            height: 100%;
+            width: 0%;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: rgba(248, 249, 250, 0.8);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            background: white;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        /* Motivation Quote */
+        .motivation-quote {
+            background: var(--secondary-gradient);
+            color: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.15em;
+            font-weight: 500;
+            box-shadow: var(--card-shadow);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        /* Timer Styles */
+        .timer {
+            font-size: 3.5em;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            animation: slideInRight 0.3s ease;
+            max-width: 300px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .notification.success { background: linear-gradient(135deg, #4CAF50, #45a049); }
+        .notification.error { background: linear-gradient(135deg, #f44336, #da190b); }
+        .notification.info { background: linear-gradient(135deg, #2196F3, #0b7dda); }
+        .notification button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            margin-left: 10px;
+            padding: 0;
+            width: auto;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .mt-20 { margin-top: 20px; }
+        .mb-20 { margin-bottom: 20px; }
+        .hidden { display: none; }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .timer {
+                font-size: 2.5em;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .timer-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .timer-controls button {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span>💪</span> AI Fitness Trainer PRO
+            </h1>
+            <p class="subtitle">Professional Edition - Your complete workout companion</p>
+        </div>
+        
+        <div class="motivation-quote" id="motivationQuote">
+            "The only bad workout is the one that didn't happen!"
+        </div>
+        
+        <div class="main-content">
+            <div class="card">
+                <h2>📋 Profile Setup</h2>
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label for="fitnessLevel">Fitness Level</label>
+                        <select id="fitnessLevel">
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="workoutGoal">Primary Goal</label>
+                        <select id="workoutGoal">
+                            <option value="strength">Build Strength</option>
+                            <option value="cardio">Improve Cardio</option>
+                            <option value="flexibility">Increase Flexibility</option>
+                            <option value="weight-loss">Weight Loss</option>
+                            <option value="muscle-gain">Muscle Gain</option>
+                            <option value="endurance">Build Endurance</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="duration">Workout Duration (minutes)</label>
+                        <input type="number" id="duration" min="10" max="120" value="30">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="equipment">Available Equipment</label>
+                        <select id="equipment">
+                            <option value="none">No Equipment</option>
+                            <option value="dumbbells">Dumbbells</option>
+                            <option value="resistance">Resistance Bands</option>
+                            <option value="gym">Full Gym Access</option>
+                        </select>
+                    </div>
+                    
+                    <button type="button" onclick="generateWorkout()">Generate Workout</button>
+                </form>
+
+                <div class="mt-20">
+                    <h3>🔧 Developer Tools</h3>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button onclick="fitnessUtils.exportData()" style="background: var(--success-gradient);">Export Data</button>
+                        <button onclick="fitnessUtils.resetData()" style="background: var(--secondary-gradient);">Reset Data</button>
+                        <input type="file" id="importFile" accept=".json" style="display: none;" onchange="fitnessUtils.importData(this)">
+                        <button onclick="document.getElementById('importFile').click()" style="background: #666;">Import Data</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>⏱️ Workout Timer</h2>
+                <div class="timer" id="timer">00:00</div>
+                <div class="timer-controls">
+                    <button onclick="startTimer()">Start</button>
+                    <button onclick="pauseTimer()">Pause</button>
+                    <button onclick="resetTimer()">Reset</button>
+                </div>
+                
+                <h3 style="margin-top: 30px;">📊 Progress Stats</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="workoutCount">0</div>
+                        <div class="stat-label">Workouts</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="exerciseCount">0</div>
+                        <div class="stat-label">Exercises</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="caloriesBurned">0</div>
+                        <div class="stat-label">Calories</div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="streakCount">0</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalTime">0</div>
+                        <div class="stat-label">Total Minutes</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="avgDuration">0</div>
+                        <div class="stat-label">Avg Workout</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>🏋️ Your AI-Generated Workout</h2>
+            <div class="workout-display" id="workoutDisplay">
+                <p style="color: #999; text-align: center;">Configure your profile and click "Generate Workout" to get started!</p>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div style="text-align: center;">
+                <button id="completeWorkout" style="display: none;" onclick="completeWorkout()">Complete Workout ✅</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === COPY AND PASTE ALL JAVASCRIPT FROM BELOW ===
+        class AIFitnessTrainer {
+            constructor() {
+                this.exerciseDatabase = this.initializeExerciseDatabase();
+                this.quotes = this.initializeMotivationalQuotes();
+                this.timer = {
+                    interval: null,
+                    seconds: 0,
+                    isPaused: true,
+                    isRunning: false
+                };
+                this.stats = this.initializeStats();
+                this.workoutHistory = this.loadWorkoutHistory();
+                this.currentWorkout = null;
+                
+                this.initializeApp();
+            }
+
+            // Enhanced Exercise Database
+            initializeExerciseDatabase() {
+                return {
+                    strength: {
+                        none: [
+                            { 
+                                name: "Push-ups", 
+                                sets: 3, 
+                                reps: "10-15", 
+                                rest: "60s", 
+                                tip: "Keep your core tight and body in a straight line.",
+                                difficulty: "beginner",
+                                muscles: ["chest", "triceps", "shoulders"]
+                            },
+                            { 
+                                name: "Bodyweight Squats", 
+                                sets: 3, 
+                                reps: "15-20", 
+                                rest: "60s", 
+                                tip: "Keep knees behind toes, chest up.",
+                                difficulty: "beginner",
+                                muscles: ["quads", "glutes", "hamstrings"]
+                            },
+                            { 
+                                name: "Lunges", 
+                                sets: 3, 
+                                reps: "10 each leg", 
+                                rest: "60s", 
+                                tip: "Keep front knee at 90 degrees.",
+                                difficulty: "intermediate",
+                                muscles: ["quads", "glutes", "hamstrings"]
+                            },
+                            { 
+                                name: "Plank", 
+                                sets: 3, 
+                                reps: "30-60s", 
+                                rest: "45s", 
+                                tip: "Keep hips level with shoulders.",
+                                difficulty: "beginner",
+                                muscles: ["core", "shoulders"]
+                            }
+                        ],
+                        dumbbells: [
+                            { 
+                                name: "Dumbbell Press", 
+                                sets: 4, 
+                                reps: "8-12", 
+                                rest: "90s", 
+                                tip: "Control the weight on the way down.",
+                                difficulty: "intermediate",
+                                muscles: ["chest", "triceps", "shoulders"]
+                            },
+                            { 
+                                name: "Dumbbell Rows", 
+                                sets: 4, 
+                                reps: "10-12", 
+                                rest: "90s", 
+                                tip: "Pull elbow back, squeeze shoulder blade.",
+                                difficulty: "intermediate",
+                                muscles: ["back", "biceps"]
+                            }
+                        ]
+                    },
+                    cardio: {
+                        none: [
+                            { 
+                                name: "Jumping Jacks", 
+                                sets: 4, 
+                                reps: "30s", 
+                                rest: "30s", 
+                                tip: "Land softly on balls of feet.",
+                                difficulty: "beginner",
+                                muscles: ["cardio", "legs", "shoulders"]
+                            },
+                            { 
+                                name: "High Knees", 
+                                sets: 4, 
+                                reps: "30s", 
+                                rest: "30s", 
+                                tip: "Drive knees up to hip level.",
+                                difficulty: "beginner",
+                                muscles: ["cardio", "quads", "hip flexors"]
+                            }
+                        ]
+                    },
+                    flexibility: {
+                        none: [
+                            { 
+                                name: "Cat-Cow Stretch", 
+                                sets: 3, 
+                                reps: "10 cycles", 
+                                rest: "30s", 
+                                tip: "Move slowly with breath.",
+                                difficulty: "beginner",
+                                muscles: ["spine", "core"]
+                            },
+                            { 
+                                name: "Downward Dog", 
+                                sets: 3, 
+                                reps: "30-45s hold", 
+                                rest: "30s", 
+                                tip: "Press hands firmly, lift hips up and back.",
+                                difficulty: "beginner",
+                                muscles: ["hamstrings", "shoulders", "back"]
+                            }
+                        ]
+                    }
+                };
+            }
+
+            initializeMotivationalQuotes() {
+                return [
+                    "The only bad workout is the one that didn't happen!",
+                    "Your body can stand almost anything. It's your mind you have to convince.",
+                    "Success starts with self-discipline.",
+                    "Don't stop when you're tired. Stop when you're done!",
+                    "The pain you feel today will be the strength you feel tomorrow."
+                ];
+            }
+
+            initializeStats() {
+                const savedStats = localStorage.getItem('fitnessTrainerStats');
+                if (savedStats) {
+                    return JSON.parse(savedStats);
+                }
+                
+                return {
+                    workoutsCompleted: 0,
+                    totalExercises: 0,
+                    totalCalories: 0,
+                    totalWorkoutTime: 0,
+                    streak: 0,
+                    lastWorkoutDate: null
+                };
+            }
+
+            loadWorkoutHistory() {
+                const history = localStorage.getItem('workoutHistory');
+                return history ? JSON.parse(history) : [];
+            }
+
+            saveWorkoutHistory() {
+                localStorage.setItem('workoutHistory', JSON.stringify(this.workoutHistory));
+            }
+
+            saveStats() {
+                localStorage.setItem('fitnessTrainerStats', JSON.stringify(this.stats));
+            }
+
+            initializeApp() {
+                this.updateStatsDisplay();
+                this.setupEventListeners();
+                this.updateMotivationalQuote();
+                this.checkWorkoutStreak();
+                this.registerServiceWorker();
+            }
+
+            registerServiceWorker() {
+                if ('serviceWorker' in navigator) {
+                        // Use a relative path so the service worker registers correctly
+                        // when the app is served from the same folder or opened locally.
+                        navigator.serviceWorker.register('service-worker.js')
+                            .then(registration => {
+                                console.log('🚀 Service Worker registered:', registration.scope);
+                            })
+                            .catch(error => {
+                                console.log('Service Worker registration failed:', error);
+                            });
+                }
+            }
+
+            setupEventListeners() {
+                document.getElementById('profileForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.generateWorkout();
+                });
+
+                document.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.generateWorkout();
+                    }
+                });
+
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden && this.timer.isRunning) {
+                        this.pauseTimer();
+                    }
+                });
+
+                // Custom Events for API
+                this.setupCustomEvents();
+            }
+
+            setupCustomEvents() {
+                // Timer events
+                document.addEventListener('timerUpdate', (event) => {
+                    console.log('Timer:', event.detail.minutes, 'minutes', event.detail.seconds, 'seconds');
+                });
+
+                document.addEventListener('timerComplete', () => {
+                    console.log('Workout complete!');
+                });
+
+                // Workout events
+                document.addEventListener('workoutGenerated', (event) => {
+                    console.log('New workout:', event.detail.workout);
+                });
+
+                document.addEventListener('workoutCompleted', (event) => {
+                    console.log('Workout stats:', event.detail.stats);
+                });
+
+                // Stats events
+                document.addEventListener('statsUpdated', (event) => {
+                    console.log('Updated stats:', event.detail.stats);
+                });
+            }
+
+            updateMotivationalQuote() {
+                const randomIndex = Math.floor(Math.random() * this.quotes.length);
+                document.getElementById('motivationQuote').textContent = this.quotes[randomIndex];
+            }
+
+            checkWorkoutStreak() {
+                const today = new Date().toDateString();
+                const lastWorkout = this.stats.lastWorkoutDate;
+                
+                if (lastWorkout) {
+                    const lastDate = new Date(lastWorkout);
+                    const todayDate = new Date();
+                    const diffTime = Math.abs(todayDate - lastDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays === 1) {
+                        this.stats.streak++;
+                    } else if (diffDays > 1) {
+                        this.stats.streak = 0;
+                    }
+                }
+                
+                this.saveStats();
+                this.updateStatsDisplay();
+            }
+
+            // === WORKOUT GENERATION API ===
+            generateWorkout() {
+                const level = document.getElementById('fitnessLevel').value;
+                const goal = document.getElementById('workoutGoal').value;
+                const duration = parseInt(document.getElementById('duration').value);
+                const equipment = document.getElementById('equipment').value;
+
+                if (!this.validateInputs(level, goal, duration, equipment)) {
+                    return;
+                }
+
+                this.showLoadingState();
+
+                setTimeout(() => {
+                    const workout = this.createWorkoutPlan(level, goal, duration, equipment);
+                    this.displayWorkout(workout);
+                    this.currentWorkout = workout;
+                    this.hideLoadingState();
+                    
+                    // Trigger custom event
+                    const event = new CustomEvent('workoutGenerated', {
+                        detail: { workout: workout }
+                    });
+                    document.dispatchEvent(event);
+                    
+                    this.showNotification('Workout generated successfully! 💪', 'success');
+                }, 1000);
+            }
+
+            validateInputs(level, goal, duration, equipment) {
+                if (duration < 10 || duration > 120) {
+                    this.showNotification('Please choose a duration between 10 and 120 minutes.', 'error');
+                    return false;
+                }
+                return true;
+            }
+
+            showLoadingState() {
+                const button = document.querySelector('#profileForm button');
+                const originalText = button.textContent;
+                button.innerHTML = '<span class="loading"></span> Generating Your Workout...';
+                button.disabled = true;
+            }
+
+            hideLoadingState() {
+                const button = document.querySelector('#profileForm button');
+                button.textContent = 'Generate Workout';
+                button.disabled = false;
+            }
+
+            createWorkoutPlan(level, goal, duration, equipment) {
+                const goalMapping = {
+                    'strength': 'strength',
+                    'cardio': 'cardio',
+                    'flexibility': 'flexibility',
+                    'weight-loss': 'cardio',
+                    'muscle-gain': 'strength',
+                    'endurance': 'cardio'
+                };
+
+                const category = goalMapping[goal];
+                let availableExercises = this.exerciseDatabase[category]?.[equipment] || 
+                                       this.exerciseDatabase[category]?.['none'] || 
+                                       this.exerciseDatabase.strength.none;
+
+                // Filter by difficulty
+                if (level === 'beginner') {
+                    availableExercises = availableExercises.filter(ex => ex.difficulty === 'beginner');
+                } else if (level === 'intermediate') {
+                    availableExercises = availableExercises.filter(ex => 
+                        ex.difficulty === 'beginner' || ex.difficulty === 'intermediate');
+                }
+
+                const levelMultiplier = {
+                    'beginner': 0.7,
+                    'intermediate': 1,
+                    'advanced': 1.3
+                };
+
+                const multiplier = levelMultiplier[level];
+                const exercisesPerMinute = goal === 'cardio' ? 3 : 2;
+                const maxExercises = Math.min(
+                    Math.floor(duration / exercisesPerMinute), 
+                    availableExercises.length
+                );
+
+                const selectedExercises = this.selectRandomExercises(availableExercises, maxExercises);
+                const adjustedExercises = selectedExercises.map(exercise => ({
+                    ...exercise,
+                    sets: Math.round(exercise.sets * multiplier)
+                }));
+
+                const caloriesPerMinute = this.getCaloriesPerMinute(goal, level);
+                const estimatedCalories = Math.round(duration * caloriesPerMinute * multiplier);
+
+                return {
+                    exercises: adjustedExercises,
+                    duration: duration,
+                    calories: estimatedCalories,
+                    goal: goal,
+                    level: level,
+                    equipment: equipment,
+                    generatedAt: new Date().toISOString()
+                };
+            }
+
+            selectRandomExercises(exercises, count) {
+                const shuffled = [...exercises].sort(() => 0.5 - Math.random());
+                return shuffled.slice(0, count);
+            }
+
+            getCaloriesPerMinute(goal, level) {
+                const baseCalories = {
+                    'strength': 6,
+                    'cardio': 10,
+                    'flexibility': 3,
+                    'weight-loss': 12,
+                    'muscle-gain': 7,
+                    'endurance': 9
+                };
+
+                const levelMultiplier = {
+                    'beginner': 0.8,
+                    'intermediate': 1,
+                    'advanced': 1.2
+                };
+
+                return baseCalories[goal] * levelMultiplier[level];
+            }
+
+            displayWorkout(workout) {
+                const workoutDisplay = document.getElementById('workoutDisplay');
+                workoutDisplay.innerHTML = '';
+
+                const header = document.createElement('div');
+                header.className = 'workout-header';
+                header.innerHTML = `
+                    <h3>Your ${workout.goal} Workout</h3>
+                    <p>Duration: ${workout.duration} minutes | Estimated Burn: ${workout.calories} calories</p>
+                `;
+                workoutDisplay.appendChild(header);
+
+                workout.exercises.forEach((exercise, index) => {
+                    const exerciseDiv = document.createElement('div');
+                    exerciseDiv.className = 'exercise-item';
+                    exerciseDiv.style.animationDelay = `${index * 0.1}s`;
+                    
+                    exerciseDiv.innerHTML = `
+                        <div class="exercise-name">${index + 1}. ${exercise.name}</div>
+                        <div class="exercise-details">
+                            <strong>Sets:</strong> ${exercise.sets} | 
+                            <strong>Reps:</strong> ${exercise.reps} | 
+                            <strong>Rest:</strong> ${exercise.rest}
+                        </div>
+                        <div class="exercise-meta">
+                            <span class="difficulty-badge ${exercise.difficulty}">${exercise.difficulty}</span>
+                            <span class="muscle-groups">${exercise.muscles.join(', ')}</span>
+                        </div>
+                        <div class="form-tip">💡 ${exercise.tip}</div>
+                    `;
+                    
+                    workoutDisplay.appendChild(exerciseDiv);
+                });
+
+                document.getElementById('completeWorkout').style.display = 'block';
+                this.updateMotivationalQuote();
+            }
+
+            // === TIMER API ===
+            startTimer() {
+                if (this.timer.isPaused) {
+                    this.timer.isPaused = false;
+                    this.timer.isRunning = true;
+                    this.timer.interval = setInterval(() => this.updateTimer(), 1000);
+                    
+                    // Trigger timer event
+                    document.dispatchEvent(new CustomEvent('timerStarted'));
+                    this.showNotification('Timer started! Let\'s get moving! 🏃‍♂️', 'success');
+                }
+            }
+
+            pauseTimer() {
+                this.timer.isPaused = true;
+                this.timer.isRunning = false;
+                clearInterval(this.timer.interval);
+                
+                document.dispatchEvent(new CustomEvent('timerPaused'));
+                this.showNotification('Timer paused. Take a breather! 😌', 'info');
+            }
+
+            resetTimer() {
+                this.pauseTimer();
+                this.timer.seconds = 0;
+                this.updateTimerDisplay();
+                this.showNotification('Timer reset. Ready when you are! ⏱️', 'info');
+            }
+
+            updateTimer() {
+                this.timer.seconds++;
+                this.updateTimerDisplay();
+                
+                // Trigger timer update event
+                const event = new CustomEvent('timerUpdate', {
+                    detail: {
+                        minutes: Math.floor(this.timer.seconds / 60),
+                        seconds: this.timer.seconds % 60
+                    }
+                });
+                document.dispatchEvent(event);
+
+                if (this.timer.seconds % 60 === 0) {
+                    this.updateMotivationalQuote();
+                }
+            }
+
+            updateTimerDisplay() {
+                const mins = Math.floor(this.timer.seconds / 60);
+                const secs = this.timer.seconds % 60;
+                document.getElementById('timer').textContent = 
+                    `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+
+            // === COMPLETE WORKOUT ===
+            completeWorkout() {
+                if (!this.currentWorkout) {
+                    this.showNotification('No active workout to complete! Generate one first.', 'error');
+                    return;
+                }
+
+                const exercises = this.currentWorkout.exercises.length;
+                const duration = this.currentWorkout.duration;
+                const calories = this.currentWorkout.calories;
+
+                // Update stats
+                this.stats.workoutsCompleted++;
+                this.stats.totalExercises += exercises;
+                this.stats.totalCalories += calories;
+                this.stats.totalWorkoutTime += duration;
+                this.stats.lastWorkoutDate = new Date().toISOString();
+
+                // Add to history
+                this.workoutHistory.unshift({
+                    ...this.currentWorkout,
+                    completedAt: new Date().toISOString(),
+                    actualDuration: this.timer.seconds
+                });
+
+                if (this.workoutHistory.length > 50) {
+                    this.workoutHistory = this.workoutHistory.slice(0, 50);
+                }
+
+                this.saveStats();
+                this.saveWorkoutHistory();
+                this.updateStatsDisplay();
+                this.animateProgressBar();
+
+                // Trigger completion event
+                const event = new CustomEvent('workoutCompleted', {
+                    detail: { stats: this.stats }
+                });
+                document.dispatchEvent(event);
+
+                this.showCompletionMessage(exercises, calories);
+                this.currentWorkout = null;
+                this.resetTimer();
+                document.getElementById('completeWorkout').style.display = 'none';
+            }
+
+            animateProgressBar() {
+                const progressBar = document.getElementById('progressBar');
+                progressBar.style.width = '100%';
+                
+                setTimeout(() => {
+                    progressBar.style.width = '0%';
+                }, 2000);
+            }
+
+            showCompletionMessage(exercises, calories) {
+                const messages = [
+                    `Amazing work! You crushed ${exercises} exercises and burned ${calories} calories! 🎉`,
+                    `Fantastic job! ${exercises} exercises completed like a champion! 💪`
+                ];
+                
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                this.showNotification(randomMessage, 'success');
+            }
+
+            updateStatsDisplay() {
+                document.getElementById('workoutCount').textContent = this.stats.workoutsCompleted;
+                document.getElementById('exerciseCount').textContent = this.stats.totalExercises;
+                document.getElementById('caloriesBurned').textContent = this.stats.totalCalories;
+                document.getElementById('streakCount').textContent = this.stats.streak;
+                document.getElementById('totalTime').textContent = this.stats.totalWorkoutTime;
+                document.getElementById('avgDuration').textContent = this.stats.workoutsCompleted > 0 ? 
+                    Math.round(this.stats.totalWorkoutTime / this.stats.workoutsCompleted) : 0;
+
+                // Trigger stats update event
+                document.dispatchEvent(new CustomEvent('statsUpdated', {
+                    detail: { stats: this.stats }
+                }));
+            }
+
+            // === NOTIFICATION API ===
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.remove()">×</button>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 5000);
+            }
+
+            // === DATA EXPORT/IMPORT API ===
+            exportWorkoutData() {
+                const data = {
+                    stats: this.stats,
+                    history: this.workoutHistory,
+                    exportedAt: new Date().toISOString()
+                };
+                
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `fitness-data-${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                this.showNotification('Workout data exported successfully! 📊', 'success');
+            }
+
+            importWorkoutData(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        this.stats = data.stats;
+                        this.workoutHistory = data.history;
+                        this.saveStats();
+                        this.saveWorkoutHistory();
+                        this.updateStatsDisplay();
+                        this.showNotification('Workout data imported successfully! 🎉', 'success');
+                    } catch (error) {
+                        this.showNotification('Error importing data. Please check the file format.', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            window.fitnessTrainer = new AIFitnessTrainer();
+        });
+
+        // === GLOBAL API FUNCTIONS ===
+        function generateWorkout() {
+            if (window.fitnessTrainer) {
+                window.fitnessTrainer.generateWorkout();
+            }
+        }
+
+        function startTimer() {
+            if (window.fitnessTrainer) {
+                window.fitnessTrainer.startTimer();
+            }
+        }
+
+        function pauseTimer() {
+            if (window.fitnessTrainer) {
+                window.fitnessTrainer.pauseTimer();
+            }
+        }
+
+        function resetTimer() {
+            if (window.fitnessTrainer) {
+                window.fitnessTrainer.resetTimer();
+            }
+        }
+
+        function completeWorkout() {
+            if (window.fitnessTrainer) {
+                window.fitnessTrainer.completeWorkout();
+            }
+        }
+
+        // === UTILITY FUNCTIONS ===
+        window.fitnessUtils = {
+            resetData: () => {
+                localStorage.clear();
+                location.reload();
+            },
+            exportData: () => {
+                if (window.fitnessTrainer) {
+                    window.fitnessTrainer.exportWorkoutData();
+                }
+            },
+            importData: (fileInput) => {
+                if (window.fitnessTrainer && fileInput.files[0]) {
+                    window.fitnessTrainer.importWorkoutData(fileInput.files[0]);
+                }
+            }
+        };
+
+        console.log(`
+💪 AI FITNESS TRAINER PRO - LOADED!
+🚀 Complete Professional Edition
+📱 PWA Ready | 📊 Full API | 💾 Data Management
+🎯 All features integrated in single file
+
+=== AVAILABLE APIs ===
+fitnessTrainer.generateWorkout()      - Generate workout
+fitnessTrainer.startTimer()          - Start timer  
+fitnessTrainer.completeWorkout()     - Complete workout
+fitnessTrainer.exportWorkoutData()   - Export data
+fitnessTrainer.showNotification()    - Show message
+
+fitnessUtils.exportData()            - Quick export
+fitnessUtils.importData()            - Import data
+fitnessUtils.resetData()             - Reset all data
+
+=== EVENTS ===
+timerUpdate, timerStarted, timerPaused
+workoutGenerated, workoutCompleted  
+statsUpdated
+
+Ready to transform fitness! 🔥
+        `);
+    </script>
+</body>
+</html>
